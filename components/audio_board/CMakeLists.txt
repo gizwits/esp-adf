@@ -143,4 +143,23 @@ set(COMPONENT_SRCS
 )
 endif()
 
+if (CONFIG_AUDIO_BOARD_ATOM_V1)
+message(STATUS "Current board name is " CONFIG_AUDIO_BOARD_ATOM_V1)
+list(APPEND COMPONENT_ADD_INCLUDEDIRS ./atom_v1)
+set(COMPONENT_SRCS
+./atom_v1/board.c
+./atom_v1/board_pins_config.c
+)
+endif()
+
+
+if (CONFIG_AUDIO_BOARD_ATOM_V1_2)
+message(STATUS "Current board name is " CONFIG_AUDIO_BOARD_ATOM_V1_2)
+list(APPEND COMPONENT_ADD_INCLUDEDIRS ./atom_v1_2)
+set(COMPONENT_SRCS
+./atom_v1_2/board.c
+./atom_v1_2/board_pins_config.c
+)
+endif()
+
 register_component()

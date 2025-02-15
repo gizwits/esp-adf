@@ -210,12 +210,20 @@ int8_t get_reset_codec_gpio(void);
 int8_t get_reset_board_gpio(void);
 
 /**
- * @brief Get DSP reset gpio number
+ * @brief Get blue led gpio number
  *
  * @return -1       non-existent
  *         Others   gpio number
  */
-int8_t get_green_led_gpio(void);
+int8_t get_blue_led_gpio(void);
+
+/**
+ * @brief Get blue led gpio number
+ *
+ * @return -1       non-existent
+ *         Others   gpio number
+ */
+int8_t get_red_led_gpio(void);
 
 /**
  * @brief Get green led gpio number
@@ -223,7 +231,15 @@ int8_t get_green_led_gpio(void);
  * @return -1       non-existent
  *         Others   gpio number
  */
-int8_t get_blue_led_gpio(void);
+int8_t get_green_led_gpio(void);
+
+/**
+ * @brief Get power hold gpio number
+ *
+ * @return -1       non-existent
+ *         Others   gpio number
+ */
+int8_t get_power_hold_gpio(void);
 
 #ifdef __cplusplus
 }
