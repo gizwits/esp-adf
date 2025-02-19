@@ -258,110 +258,110 @@ static void audio_recorder_update_state(audio_recorder_t *recorder, int event)
         last_event = event;
     }
 
-    if (event == RECORDER_EVENT_WWE_DECT && recorder->state != RECORDER_ST_IDLE) {
-        audio_recorder_reset(recorder);
-    }
-    recorder_sr_state_t sr_st = { 0 };
-    recorder->sr_iface->base.get_state(recorder->sr_handle, &sr_st);
+    // if (event == RECORDER_EVENT_WWE_DECT && recorder->state != RECORDER_ST_IDLE) {
+    //     audio_recorder_reset(recorder);
+    // }
+    // recorder_sr_state_t sr_st = { 0 };
+    // recorder->sr_iface->base.get_state(recorder->sr_handle, &sr_st);
 
-    switch (recorder->state) {
-        case RECORDER_ST_IDLE: {
-            if (event == RECORDER_EVENT_WWE_DECT) {
-                if (sr_st.wwe_enable) {
-                    audio_recorder_set_state(recorder, RECORDER_ST_WAKEUP);
-                    audio_recorder_wakeup_timer_start(recorder);
-                    audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_START, &recorder->wakeup_result, sizeof(recorder_sr_wakeup_result_t));
-                } else {
-                    audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
-                    audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_START, &recorder->wakeup_result, sizeof(recorder_sr_wakeup_result_t));
-                    audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
-                }
-                audio_recorder_encoder_enable(recorder, true);
-            } else if (!sr_st.wwe_enable && event == RECORDER_EVENT_SPEECH_DECT) {
-                if (recorder->vad_check) {
-                    audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SPEECH);
-                    audio_recorder_vad_timer_start(recorder);
-                } else {
-                    audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
-                    audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
-                }
-            }
-            break;
-        }
-        case RECORDER_ST_WAKEUP: {
-            if (event == RECORDER_EVENT_SPEECH_DECT) {
-                if (recorder->vad_check) {
-                    audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SPEECH);
-                    audio_recorder_vad_timer_start(recorder);
-                } else {
-                    audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
-                    audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
-                }
-            } else if (event == RECORDER_EVENT_WAKEUP_TIMER_EXPIRED) {
-                recorder->state = RECORDER_ST_IDLE;
-                esp_timer_stop(recorder->vad_timer);
-                audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_END, NULL, 0);
-                audio_recorder_encoder_enable(recorder, false);
-            }
-            break;
-        }
-        case RECORDER_ST_WAIT_FOR_SPEECH: {
-            if (event == RECORDER_EVENT_NOISE_DECT) {
-                audio_recorder_set_state(recorder, RECORDER_ST_WAKEUP);
-            } else if (event == RECORDER_EVENT_VAD_TIMER_EXPIRED) {
-                audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
-                esp_timer_stop(recorder->wakeup_timer);
-                audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
-            } else if (event == RECORDER_EVENT_WAKEUP_TIMER_EXPIRED) {
-                recorder->state = RECORDER_ST_IDLE;
-                esp_timer_stop(recorder->vad_timer);
-                audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_END, NULL, 0);
-                audio_recorder_encoder_enable(recorder, false);
-            }
-            break;
-        }
-        case RECORDER_ST_SPEECHING: {
-            if (event == RECORDER_EVENT_NOISE_DECT && sr_st.wwe_enable) {
-                if (recorder->vad_check) {
-                    audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SILENCE);
-                    audio_recorder_vad_timer_start(recorder);
-                } else {
-                    audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SLEEP);
-                    audio_recorder_wakeup_timer_start(recorder);
-                    audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_END, NULL, 0);
-                }
-            }
-            break;
-        }
-        case RECORDER_ST_WAIT_FOR_SILENCE: {
-            if (event == RECORDER_EVENT_SPEECH_DECT) {
-                audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
-                esp_timer_stop(recorder->vad_timer);
-            } else if (event == RECORDER_EVENT_VAD_TIMER_EXPIRED) {
-                if (sr_st.wwe_enable == true) {
-                    audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SLEEP);
-                    audio_recorder_wakeup_timer_start(recorder);
-                } else {
-                    recorder->state = RECORDER_ST_IDLE;
-                }
-                audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_END, NULL, 0);
-            }
-            break;
-        }
-        case RECORDER_ST_WAIT_FOR_SLEEP: {
-            if (event == RECORDER_EVENT_SPEECH_DECT) {
-                audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SPEECH);
-                audio_recorder_vad_timer_start(recorder);
-            } else if (event == RECORDER_EVENT_WAKEUP_TIMER_EXPIRED) {
-                audio_recorder_set_state(recorder, RECORDER_ST_IDLE);
-                esp_timer_stop(recorder->vad_timer);
-                audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_END, NULL, 0);
-            }
-            break;
-        }
-        default:
-            break;
-    }
+    // switch (recorder->state) {
+    //     case RECORDER_ST_IDLE: {
+    //         if (event == RECORDER_EVENT_WWE_DECT) {
+    //             if (sr_st.wwe_enable) {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_WAKEUP);
+    //                 audio_recorder_wakeup_timer_start(recorder);
+    //                 audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_START, &recorder->wakeup_result, sizeof(recorder_sr_wakeup_result_t));
+    //             } else {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
+    //                 audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_START, &recorder->wakeup_result, sizeof(recorder_sr_wakeup_result_t));
+    //                 audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
+    //             }
+    //             audio_recorder_encoder_enable(recorder, true);
+    //         } else if (!sr_st.wwe_enable && event == RECORDER_EVENT_SPEECH_DECT) {
+    //             if (recorder->vad_check) {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SPEECH);
+    //                 audio_recorder_vad_timer_start(recorder);
+    //             } else {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
+    //                 audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
+    //             }
+    //         }
+    //         break;
+    //     }
+    //     case RECORDER_ST_WAKEUP: {
+    //         if (event == RECORDER_EVENT_SPEECH_DECT) {
+    //             if (recorder->vad_check) {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SPEECH);
+    //                 audio_recorder_vad_timer_start(recorder);
+    //             } else {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
+    //                 audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
+    //             }
+    //         } else if (event == RECORDER_EVENT_WAKEUP_TIMER_EXPIRED) {
+    //             recorder->state = RECORDER_ST_IDLE;
+    //             esp_timer_stop(recorder->vad_timer);
+    //             audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_END, NULL, 0);
+    //             audio_recorder_encoder_enable(recorder, false);
+    //         }
+    //         break;
+    //     }
+    //     case RECORDER_ST_WAIT_FOR_SPEECH: {
+    //         if (event == RECORDER_EVENT_NOISE_DECT) {
+    //             audio_recorder_set_state(recorder, RECORDER_ST_WAKEUP);
+    //         } else if (event == RECORDER_EVENT_VAD_TIMER_EXPIRED) {
+    //             audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
+    //             esp_timer_stop(recorder->wakeup_timer);
+    //             audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_START, NULL, 0);
+    //         } else if (event == RECORDER_EVENT_WAKEUP_TIMER_EXPIRED) {
+    //             recorder->state = RECORDER_ST_IDLE;
+    //             esp_timer_stop(recorder->vad_timer);
+    //             audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_END, NULL, 0);
+    //             audio_recorder_encoder_enable(recorder, false);
+    //         }
+    //         break;
+    //     }
+    //     case RECORDER_ST_SPEECHING: {
+    //         if (event == RECORDER_EVENT_NOISE_DECT && sr_st.wwe_enable) {
+    //             if (recorder->vad_check) {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SILENCE);
+    //                 audio_recorder_vad_timer_start(recorder);
+    //             } else {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SLEEP);
+    //                 audio_recorder_wakeup_timer_start(recorder);
+    //                 audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_END, NULL, 0);
+    //             }
+    //         }
+    //         break;
+    //     }
+    //     case RECORDER_ST_WAIT_FOR_SILENCE: {
+    //         if (event == RECORDER_EVENT_SPEECH_DECT) {
+    //             audio_recorder_set_state(recorder, RECORDER_ST_SPEECHING);
+    //             esp_timer_stop(recorder->vad_timer);
+    //         } else if (event == RECORDER_EVENT_VAD_TIMER_EXPIRED) {
+    //             if (sr_st.wwe_enable == true) {
+    //                 audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SLEEP);
+    //                 audio_recorder_wakeup_timer_start(recorder);
+    //             } else {
+    //                 recorder->state = RECORDER_ST_IDLE;
+    //             }
+    //             audio_recorder_update_state_2_user(recorder, AUDIO_REC_VAD_END, NULL, 0);
+    //         }
+    //         break;
+    //     }
+    //     case RECORDER_ST_WAIT_FOR_SLEEP: {
+    //         if (event == RECORDER_EVENT_SPEECH_DECT) {
+    //             audio_recorder_set_state(recorder, RECORDER_ST_WAIT_FOR_SPEECH);
+    //             audio_recorder_vad_timer_start(recorder);
+    //         } else if (event == RECORDER_EVENT_WAKEUP_TIMER_EXPIRED) {
+    //             audio_recorder_set_state(recorder, RECORDER_ST_IDLE);
+    //             esp_timer_stop(recorder->vad_timer);
+    //             audio_recorder_update_state_2_user(recorder, AUDIO_REC_WAKEUP_END, NULL, 0);
+    //         }
+    //         break;
+    //     }
+    //     default:
+    //         break;
+    // }
 }
 
 static void audio_recorder_reset(audio_recorder_t *recorder)
@@ -495,7 +495,9 @@ audio_rec_handle_t audio_recorder_create(audio_rec_cfg_t *config)
 
     audio_recorder_t *recorder = audio_calloc(1, sizeof(audio_recorder_t));
     AUDIO_NULL_CHECK(TAG, recorder, return NULL);
-    recorder->state = RECORDER_ST_IDLE;
+    // recorder->state = RECORDER_ST_IDLE;
+    recorder->state = RECORDER_ST_SPEECHING;
+
 
     recorder->event_cb       = config->event_cb;
     recorder->user_data      = config->user_data;
