@@ -38,11 +38,11 @@ extern "C" {
 #endif
 
 #define USE_ES7210_ADC        0
-#if USE_ES7210_ADC
-#warning "ES7210 ADC is used!"
-#else
-#warning "ES7210 ADC is not used, using ES8311 ADC instead"
-#endif
+// #if USE_ES7210_ADC
+// #warning "ES7210 ADC is used!"
+// #else
+// #warning "ES7210 ADC is not used, using ES8311 ADC instead"
+// #endif
 
 /**
  * @brief Audio board handle

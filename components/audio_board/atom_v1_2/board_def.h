@@ -125,7 +125,7 @@
 // PA GPIO
 #define PA_ENABLE_GPIO            GPIO_NUM_7
 #define CODEC_ADC_I2S_PORT        (0)
-#define CODEC_ADC_BITS_PER_SAMPLE (32)  /* 32bit */
+#define CODEC_ADC_BITS_PER_SAMPLE ((i2s_data_bit_width_t)16) /* 16bit */
 #define CODEC_ADC_SAMPLE_RATE     (48000)
 #define RECORD_HARDWARE_AEC       (true)
 #define BOARD_PA_GAIN             (6)  /* Power amplifier gain defined by board (dB) */
@@ -151,11 +151,11 @@ extern audio_hal_func_t AUDIO_CODEC_ES7210_DEFAULT_HANDLE;
  * @brief Button Function Definition
  */
 #define FUNC_BUTTON_EN              (1)
-#define INPUT_KEY_NUM               4
+#define INPUT_KEY_NUM               5
 
 #if 1
-#define BUTTON_VOLUP_ID             GPIO_NUM_14
-#define BUTTON_VOLDOWN_ID           GPIO_NUM_38
+#define BUTTON_VOLUP_ID             GPIO_NUM_13
+#define BUTTON_VOLDOWN_ID           GPIO_NUM_14
 #else
 #define BUTTON_VOLUP_ID             -1
 #define BUTTON_VOLDOWN_ID           -1
@@ -163,8 +163,8 @@ extern audio_hal_func_t AUDIO_CODEC_ES7210_DEFAULT_HANDLE;
 
 #define BUTTON_SET_ID               -1
 #define BUTTON_PLAY_ID              GPIO_NUM_12
-#define BUTTON_MODE_ID              -1 // GPIO_NUM_11
-#define BUTTON_REC_ID               GPIO_NUM_13
+#define BUTTON_MODE_ID              GPIO_NUM_39 // GPIO_NUM_11
+#define BUTTON_REC_ID               GPIO_NUM_38
 
 #define INPUT_KEY_DEFAULT_INFO() {                     \
     {                                                  \
@@ -186,6 +186,11 @@ extern audio_hal_func_t AUDIO_CODEC_ES7210_DEFAULT_HANDLE;
         .type = PERIPH_ID_BUTTON,                      \
         .user_id = INPUT_KEY_USER_ID_REC,              \
         .act_id = BUTTON_REC_ID,                       \
+    },                                                 \
+    {                                                  \
+        .type = PERIPH_ID_BUTTON,                      \
+        .user_id = INPUT_KEY_USER_ID_MODE,             \
+        .act_id = BUTTON_MODE_ID,                      \
     },                                                 \
 }
 
