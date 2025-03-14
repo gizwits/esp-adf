@@ -162,13 +162,4 @@ set(COMPONENT_SRCS
 )
 endif()
 
-if (CONFIG_AUDIO_BOARD_ATOM_XIAOZHI_V1)
-message(STATUS "Current board name is " CONFIG_AUDIO_BOARD_ATOM_XIAOZHI_V1)
-list(APPEND COMPONENT_ADD_INCLUDEDIRS ./atom_xiaozhi_v1)
-set(COMPONENT_SRCS
-./atom_xiaozhi_v1/board.c
-./atom_xiaozhi_v1/board_pins_config.c
-)
-endif()
-
 register_component()
