@@ -162,4 +162,23 @@ set(COMPONENT_SRCS
 )
 endif()
 
+if (CONFIG_AUDIO_BOARD_XIAOZHI_S3)
+message(STATUS "Current board name is " CONFIG_AUDIO_BOARD_XIAOZHI_S3)
+list(APPEND COMPONENT_ADD_INCLUDEDIRS ./xiaozhi_s3)
+set(COMPONENT_SRCS
+./xiaozhi_s3/board.c
+./xiaozhi_s3/board_pins_config.c
+)
+endif()
+
+if (CONFIG_AUDIO_BOARD_TOYCORE_V1)
+message(STATUS "Current board name is " CONFIG_AUDIO_BOARD_TOYCORE_V1)
+list(APPEND COMPONENT_ADD_INCLUDEDIRS ./toycore_v1)
+set(COMPONENT_SRCS
+./toycore_v1/board.c
+./toycore_v1/board_pins_config.c
+)
+endif()
+
+
 register_component()
