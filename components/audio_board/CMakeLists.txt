@@ -180,5 +180,14 @@ set(COMPONENT_SRCS
 )
 endif()
 
+if (CONFIG_AUDIO_BOARD_TOYCORE_DINGSHE)
+message(STATUS "Current board name is " CONFIG_AUDIO_BOARD_TOYCORE_DINGSHE)
+list(APPEND COMPONENT_ADD_INCLUDEDIRS ./toycore_dingshe)
+set(COMPONENT_SRCS
+./toycore_dingshe/board.c
+./toycore_dingshe/board_pins_config.c
+)
+endif()
+
 
 register_component()
