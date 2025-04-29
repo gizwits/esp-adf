@@ -155,7 +155,7 @@ extern audio_hal_func_t AUDIO_CODEC_ES7210_DEFAULT_HANDLE;
 
 #if 1
 #define BUTTON_VOLUP_ID             GPIO_NUM_1     // GPIO_NUM_13
-#define BUTTON_VOLDOWN_ID           GPIO_NUM_13     // GPIO_NUM_14
+#define BUTTON_VOLDOWN_ID           GPIO_NUM_38     // GPIO_NUM_14
 #else
 #define BUTTON_VOLUP_ID             -1
 #define BUTTON_VOLDOWN_ID           -1
